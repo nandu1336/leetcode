@@ -17,11 +17,7 @@ def merge_intervals(intervals: List[int]):
             res.append(left)
             left = right
             
-    if right: 
-        res.append(right)
-    else: 
-        res.append(left)
-
+    res.append(right) if right else res.append(left)
     return res
 
         
