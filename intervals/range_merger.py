@@ -1,6 +1,18 @@
 from typing import List 
+import heapq
+
+'''
+    Question: Construct a class with two methods, insert and query. 
+    Insert will be called with one interval (List of intergers of length 2, representing start and end of the range) each time, 
+    Query will be called with an integer, if the integer can be found in any of the intervals return True, else return False 
+'''
 
 class RangeMerger:
+    '''
+        Time Complexity: 
+            insert = O(n)
+            query = O(n)
+    '''
     def __init__(self) -> None:
         self.ranges: List[int] = []
         
@@ -43,10 +55,46 @@ class RangeMerger:
     
     def merge(self, existing_range, new_range):
         return [min(existing_range[0], new_range[0]), max(existing_range[1], new_range[1])]
-    
 
+
+class RangeManager:
+    ''' 
+        Time Complexity: 
+            insert: O(1)
+            query: O(n)
+    '''
+    def __init__(self) -> None:
+        self.ranges = set()
+
+    def insert(self, new_range: List[int]) -> List[int]:
+        self.ranges.add(tuple(new_range))  # O(1)
+        return self.ranges
+
+    def query(self, num: int) -> bool:
+        for range in self.ranges:          # O(n)
+            if range[0] <=  num and range[1] >= num: 
+                return True
+        return False
+
+    def least_size(self, num: int) -> int:
+        ranges = list(self.ranges)          # O(n)
+        ranges.sort()                       # O(nlogn)
+
+        minHeap = []
+        for start, end in self.ranges:      # O(n)
+            if start < num:
+                heapq.heappush(minHeap, (end - start + 1, end))
+            
+            else: break
+
+        while minHeap[0][1] < num:          #O(n)
+            heapq.heappop()
+
+        return minHeap[0][0] if minHeap else -1
+    
 if __name__ == "__main__":
-    merger = RangeMerger()
+    # merger = RangeMerger()
+    merger = RangeManager()
     print(merger.insert([4, 5]))
     print(merger.insert([2, 3]))
     print(merger.insert([2, 4]))
@@ -59,3 +107,6 @@ if __name__ == "__main__":
     print(merger.query(11))
     print(merger.query(111))
     print(merger.query(21))
+
+    print(merger.least_size(3))
+    print(merger.least_size(21))
