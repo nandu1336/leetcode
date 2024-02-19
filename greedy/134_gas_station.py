@@ -1,6 +1,15 @@
 from typing import List
 
 def can_complete_cicuit(gas: List[int], cost: List[int]) -> bool:
+    '''
+    Note: 
+    
+    1. I did not understand why when we can't reach a station B from station A, you can't reach
+    anyother station that is b/w A and B (inclusive A, exclusing B).
+    
+    2. I also did not understand why when you reach the end of the list, you don't have to try 
+    with stations start at 0 again.
+    '''
     if sum(gas) < sum(cost): return -1
     
     res = 0
