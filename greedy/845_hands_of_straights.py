@@ -1,0 +1,42 @@
+from typing import List
+from collections import Counter
+
+
+def is_n_straight_hand(hand: List[int], group_size: int) -> bool:
+    '''
+        Note: It beat only 5% solutions in leetcode and needs lot of optimization. 
+        Will continue working on it.
+    '''
+    if len(hand) % group_size != 0: return False
+    hand.sort()
+    res, grp = [], []
+    i = 0
+    visited = set()
+    last_card = None
+    goto_index = None
+
+    while i < len(hand):
+        card = hand[i]
+        if last_card is None or last_card + 1 == card:
+            if i not in visited:
+                visited.add(i)
+                grp.append(card)
+                last_card = card
+
+                if len(grp) == group_size:
+                    res.append(grp)
+                    i = goto_index if goto_index else i + 1
+                    last_card = None
+                    grp = []
+                    continue
+        else:
+            goto_index = goto_index or i
+        i += 1
+
+    return len(res) * group_size == len(hand)
+
+if __name__ == "__main__":
+    print(is_n_straight_hand(hand=[1,2,3,6,2,3,4,7,8], group_size=3))
+    print(is_n_straight_hand(hand=[1,2,3,4,5,6], group_size=2))
+    print(is_n_straight_hand(hand=[1,1,2,2,3,3], group_size=3))
+    print(is_n_straight_hand(hand=[0, 0], group_size=2))
