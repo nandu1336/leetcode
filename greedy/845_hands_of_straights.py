@@ -67,30 +67,24 @@ def is_n_straight_hand_2(hand: List[int], group_size: int) -> bool:
 def is_n_straight_hand_3(hand: List[int], group_size: int) -> bool: 
     if len(hand) % group_size != 0: return False
 
-    counter = Counter(hand)
+    counter = {}
+    for card in hand:
+        counter[card] = 1 + counter.get(card, 0)
+
     min_heap = list(counter.keys())
     heapq.heapify(min_heap)
-    res, grp = [], []
 
     while min_heap: 
         card = min_heap[0]
-        grp = []
+        for i in range(card, card + group_size):
+            if counter.get(i, 0) == 0: return False
+            counter[i] -= 1
 
-        for i in range(group_size):
-            next_card = card + i
-            
-            if counter.get(next_card, 0) == 0: return False
-
-            grp.append(next_card)
-            counter[next_card] -= 1
-
-            if counter[next_card] == 0: 
+            if counter[i] == 0:            
+                if i != min_heap[0]: return False       
                 heapq.heappop(min_heap)
-
-        if len(grp) == group_size:
-            res.append(grp)
-    
-    return len(res) * group_size == len(hand)
+            
+        return True
 
 if __name__ == "__main__":
     print(is_n_straight_hand_3(hand=[1,2,3,6,2,3,4,7,8], group_size=3))
