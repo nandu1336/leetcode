@@ -1,6 +1,6 @@
 from typing import List
 from collections import Counter
-
+import heapq
 
 def is_n_straight_hand(hand: List[int], group_size: int) -> bool:
     '''
@@ -49,7 +49,7 @@ def is_n_straight_hand_2(hand: List[int], group_size: int) -> bool:
     for card in sorted(hand):
         temp = card
         grp = []
-        while temp in hand_set and c[temp] > 0:
+        while c[temp] > 0:
             grp.append(temp)
             c[temp] -= 1
             if c[temp] == 0: 
@@ -64,10 +64,38 @@ def is_n_straight_hand_2(hand: List[int], group_size: int) -> bool:
     
     return len(res) * group_size == len(hand)
 
+def is_n_straight_hand_3(hand: List[int], group_size: int) -> bool: 
+    if len(hand) % group_size != 0: return False
+
+    counter = Counter(hand)
+    min_heap = list(counter.keys())
+    heapq.heapify(min_heap)
+    res, grp = [], []
+
+    while min_heap: 
+        card = min_heap[0]
+        grp = []
+
+        for i in range(group_size):
+            next_card = card + i
+            
+            if counter.get(next_card, 0) == 0: return False
+
+            grp.append(next_card)
+            counter[next_card] -= 1
+
+            if counter[next_card] == 0: 
+                heapq.heappop(min_heap)
+
+        if len(grp) == group_size:
+            res.append(grp)
+    
+    return len(res) * group_size == len(hand)
+
 if __name__ == "__main__":
-    print(is_n_straight_hand_2(hand=[1,2,3,6,2,3,4,7,8], group_size=3))
-    print(is_n_straight_hand_2(hand=[1,2,3,4,5,6], group_size=2))
-    print(is_n_straight_hand_2(hand=[1,1,2,2,3,3], group_size=3))
-    print(is_n_straight_hand_2(hand=[0, 0], group_size=2))
-    print(is_n_straight_hand_2(hand=[1,2,3,4,5], group_size=4))
-    print(is_n_straight_hand_2(hand=[8,10,12], group_size=3))
+    print(is_n_straight_hand_3(hand=[1,2,3,6,2,3,4,7,8], group_size=3))
+    print(is_n_straight_hand_3(hand=[1,2,3,4,5,6], group_size=2))
+    print(is_n_straight_hand_3(hand=[1,1,2,2,3,3], group_size=3))
+    print(is_n_straight_hand_3(hand=[0, 0], group_size=2))
+    print(is_n_straight_hand_3(hand=[1,2,3,4,5], group_size=4))
+    print(is_n_straight_hand_3(hand=[8,10,12], group_size=3))
