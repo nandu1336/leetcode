@@ -12,8 +12,8 @@ def exist(board: List[List[str]], word: str) -> bool:
         if char_index == len(word) - 1: return True
 
         visited.add((i, j))
-        result = (  dfs(i+1, j, char_index + 1) or dfs(i, j+1, char_index + 1) or
-                    dfs(i-1, j, char_index + 1) or dfs(i, j-1, char_index + 1))
+        result = (  dfs(i + 1, j, char_index + 1) or dfs(i, j + 1, char_index + 1) or
+                    dfs(i - 1, j, char_index + 1) or dfs(i, j - 1, char_index + 1))
         
         visited.remove((i, j))
         return result
