@@ -17,6 +17,15 @@ def rob(nums: List[int]) -> int:
     
     return max(dfs(0), dfs(1))
 
+def rob_dp(nums: List[int]) -> int:
+    house1, house2 = 0, 0
+
+    for num in nums:
+        new_rob = max(house1 + num, house2)
+        house1, house2 = house2, new_rob
+    
+    return house2
+
 if __name__ == "__main__":
-    print(rob(nums=[1, 2, 3, 1]))
-    print(rob(nums=[2, 7, 9, 3, 1]))
+    print(rob_dp(nums=[1, 2, 3, 1]))
+    print(rob_dp(nums=[2, 7, 9, 3, 1]))
