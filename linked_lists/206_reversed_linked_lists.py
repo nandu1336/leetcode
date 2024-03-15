@@ -19,7 +19,8 @@ if __name__ == "__main__":
     # head = [1,2,3,4,5]
     head = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, None)))))
     res = reverese_list(head)
-    
+    values = []
     while res:
-        print(res.val)
+        values.append(res.val)
         res = res.next
+    print(values)
